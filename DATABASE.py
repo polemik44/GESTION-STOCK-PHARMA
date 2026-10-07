@@ -147,24 +147,21 @@ def nouveau_produit(nom,qte,qte_seuil,date,perim):
     
         #enregistrement dans la base de données
     try:
-        #pour renseigner l'historique des entrées
+        #pour renseigner le stock de produits
         curs.execute("insert into produits(NomProduit,STOCK,SEUIL) values(?,?,?)",(nom,qte,qte_seuil))
         conn.commit()
+
         curs.execute("select id from produits where NomProduit=?",(nom,))
         (id_prod,)=curs.fetchone()
+
+        # rendeigner la table des entrées 
+
         curs.execute('insert into ENTREES(IDPRODUITS,NOMPRODUIT,QUANTITE,DATEENTREE, DATEPEREMPTION) values(?,?,?,?,?)',(id_prod,nom,qte,datesql,perimsql))
         conn.commit() #pour actualiser la valeur entrée dans la base de donnée
         
         #renseigner la table des stocks disponibles
         curs.execute("insert into LOTS(IDPRODUIT,NOMPRODUIT,QUANTITE,DATEPEREMPTION) values(?,?,?,?)",(id_prod,nom,qte,perimsql))
-        conn.commit
-            
-        #ACTUALISATION DU STOCK APRES NOUVELLE ENTREE------
-        
-        #ajout de la nouvelle valeur dans la table produits
-        
-        curs.execute("update produits set STOCK = STOCK + ?  where id=? ",(qte,id_prod))
-        conn.commit() #valider la modfification 
+        conn.commit()
         
         #anticiper une valeur manquante dans la saisie 
     except UnboundLocalError:

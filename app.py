@@ -45,7 +45,7 @@ page = st.sidebar.radio(
      "Traçabilité", "Historique", "Réinitialisation"],
 )
  
-st.title("Gestion de stock pharmaceutique")
+st.title("GESTION DE STOCK PHARMACEUTIQUE ")
  
  
 # ============================================================
